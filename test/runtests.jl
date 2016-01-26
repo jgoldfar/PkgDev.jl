@@ -16,7 +16,7 @@ function temp_pkg_dir(fn::Function, remove_tmp_dir::Bool=true)
         remove_tmp_dir && rm(tmpdir, recursive=true)
     end
 end
-
+@testset begin
 temp_pkg_dir() do pkgdir
 
     @testset "testing a package with test dependencies causes them to be installed for the duration of the test" begin
@@ -141,11 +141,11 @@ end"""
         repo = LibGit2.GitRepo(joinpath(pkgdir,"PackageWithTags"))
         try
             tags = LibGit2.tag_list(repo)
-            @test "v0.0.1" in tags == true
-            @test "v0.0.2" in tags == true
+            @test "v0.0.1" in tags
+            @test "v0.0.2" in tags
         finally
             finalize(repo)
         end
     end
-
+end
 end
